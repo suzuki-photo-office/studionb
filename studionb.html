@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>スタジオニューボーンフォトご予約</title>
+    <!-- LINE LIFF SDK -->
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -11,31 +12,37 @@
         
         .container { max-width: 500px; margin: 0 auto; }
         
-        /* タイトル部分の背景色を指定カラー(#b5c8bf)に変更 */
-        .header-area { background-color: #b5c8bf; padding: 30px 16px; text-align: center; color: #333; margin-bottom: 24px; }
+        /* タイトルエリア：背景色 #b5c8bf、文字色を「白」に変更 */
+        .header-area { background-color: #b5c8bf; padding: 30px 16px; text-align: center; color: #ffffff; margin-bottom: 24px; }
         h2 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
-        .subtitle { font-size: 13px; color: #555; }
+        .subtitle { font-size: 13px; color: #ffffff; opacity: 0.9; }
         
         .form-content { padding: 0 16px; }
-        .form-group { background: #ffffff; padding: 20px 16px; border-radius: 12px; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); border: 1px solid #eaeaea; }
-        label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #222; }
-        .required-badge { background-color: #ff4d4f; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; margin-left: 6px; vertical-align: middle; }
-        .optional-badge { background-color: #8c8c8c; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; margin-left: 6px; vertical-align: middle; }
         
+        /* 入力欄を囲むカードの背景色を #b5c8bf に変更 */
+        .form-group { background: #b5c8bf; padding: 20px 16px; border-radius: 12px; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); border: 1px solid #a3b8ad; }
+        
+        /* カード内の文字色を入力欄と見分けやすく調整 */
+        label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #2b3a32; }
+        .required-badge { background-color: #ff4d4f; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; margin-left: 6px; vertical-align: middle; }
+        .optional-badge { background-color: #697d73; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; margin-left: 6px; vertical-align: middle; }
+        
+        /* 入力ボックス自体は文字が見やすくなるよう白背景を維持しつつ、枠線を馴染ませています */
         input[type="text"], input[type="tel"], input[type="date"], input[type="number"], input[type="datetime-local"], textarea { 
-            width: 100%; padding: 14px; border: 1px solid #d9d9d9; border-radius: 8px; font-size: 16px; background: #fff; color: #333; transition: all 0.2s; -webkit-appearance: none;
+            width: 100%; padding: 14px; border: 1px solid #d9d9d9; border-radius: 8px; font-size: 16px; background: #ffffff; color: #333; transition: all 0.2s; -webkit-appearance: none;
         }
         textarea { resize: vertical; min-height: 80px; font-family: inherit; }
-        input:focus, textarea:focus { border-color: #7aa692; outline: none; background: #fff; box-shadow: 0 0 0 3px rgba(122, 166, 146, 0.1); }
+        input:focus, textarea:focus { border-color: #7aa692; outline: none; background: #fff; box-shadow: 0 0 0 3px rgba(122, 166, 146, 0.2); }
         input::placeholder, textarea::placeholder { color: #bfbfbf; font-size: 15px; }
         
-        /* ラジオボタンのスタイル */
-        .radio-group { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
-        .radio-label { display: flex; align-items: center; font-weight: normal; font-size: 15px; cursor: pointer; }
+        /* ラジオボタンエリアの文字色調整 */
+        .radio-group { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; color: #2b3a32; }
+        .radio-label { display: flex; align-items: center; font-weight: 500; font-size: 15px; cursor: pointer; }
         .radio-label input { width: 20px; height: 20px; margin-right: 12px; accent-color: #7aa692; }
         
+        .note { font-size: 12px; color: #52635a; margin-top: 6px; line-height: 1.4; }
+        
         .btn-area { margin-top: 24px; padding: 0 16px; }
-        /* 送信ボタンの色を指定カラー(#7aa692)に変更 */
         button { width: 100%; padding: 16px; background-color: #7aa692; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(122, 166, 146, 0.2); transition: all 0.2s; }
         button:disabled { background-color: #d9d9d9; color: #8c8c8c; cursor: not-allowed; box-shadow: none; }
         button:active { background-color: #638c7b; transform: scale(0.99); }
@@ -50,6 +57,7 @@
         </div>
         
         <div class="form-content">
+            <!-- 個人情報 -->
             <div class="form-group">
                 <label for="name">お名前<span class="required-badge">必須</span></label>
                 <input type="text" id="name" placeholder="例：山田 太郎">
@@ -65,6 +73,7 @@
                 <input type="text" id="address" placeholder="例：東京都渋谷区○○1-2-3">
             </div>
 
+            <!-- 希望日時 -->
             <div class="form-group">
                 <label for="date1">撮影希望日①<span class="required-badge">必須</span></label>
                 <input type="datetime-local" id="date1">
@@ -80,6 +89,7 @@
                 <input type="datetime-local" id="date3">
             </div>
 
+            <!-- 希望プラン -->
             <div class="form-group">
                 <label class="required">希望プラン<span class="required-badge">必須</span></label>
                 <div class="radio-group">
@@ -91,6 +101,7 @@
                 </div>
             </div>
 
+            <!-- 出産情報 -->
             <div class="form-group">
                 <label for="birthDate">出産予定日or出産日<span class="optional-badge">任意</span></label>
                 <input type="date" id="birthDate">
@@ -104,6 +115,7 @@
                 </div>
             </div>
 
+            <!-- 赤ちゃん情報 -->
             <div class="form-group">
                 <label for="babyName">お子様のお名前（決まっていれば）<span class="optional-badge">任意</span></label>
                 <input type="text" id="babyName" placeholder="例：ひなた（漢字：陽向）">
@@ -113,7 +125,7 @@
                 <label>お子様の性別<span class="optional-badge">任意</span></label>
                 <div class="radio-group">
                     <label class="radio-label"><input type="radio" name="babyGender" value="男の子"> 男の子</label>
-                    <label class="radio-label"><input type="radio" name="babyGender" value="女の子"> 女の子</label>
+                    <label class="radio-label"><input type="radio" name="女の子" value="女の子"> 女の子</label>
                     <label class="radio-label"><input type="radio" name="babyGender" value="わからない"> わからない</label>
                 </div>
             </div>
@@ -123,6 +135,7 @@
                 <input type="number" id="babyWeight" placeholder="例：3100">
             </div>
 
+            <!-- ご家族情報 -->
             <div class="form-group">
                 <label for="siblings">ご兄弟のお名前、性別、年齢<span class="optional-badge">任意</span></label>
                 <textarea id="siblings" placeholder="例：兄：そうた（4歳）"></textarea>
@@ -133,6 +146,7 @@
                 <textarea id="attendees" placeholder="例：大人2人（夫婦）、子供1人（上の子）"></textarea>
             </div>
 
+            <!-- 質問相談 -->
             <div class="form-group">
                 <label for="questions">ご質問、ご相談<span class="optional-badge">任意</span></label>
                 <textarea id="questions" placeholder="例：上の子との2ショットも希望です。"></textarea>
@@ -145,7 +159,6 @@
     </div>
 
     <script>
-        // スタジオニューボーンフォト専用のLIFF IDを設定済み
         const MY_LIFF_ID = "2006407169-7VIOxey0"; 
 
         // 初期化処理
@@ -171,7 +184,10 @@
 
         // 送信処理
         function submitForm() {
-            const name = document.getElementById('name').value.trim();
+            const nameInput = document.getElementById('name').value.trim();
+            // お名前のあとに「様」を自動でくっつける処理
+            const name = nameInput ? nameInput + ' 様' : '';
+            
             const phone = document.getElementById('phone').value.trim();
             const address = document.getElementById('address').value.trim();
             const date1 = document.getElementById('date1').value;
@@ -187,20 +203,17 @@
             const attendees = document.getElementById('attendees').value.trim() || '未記入';
             const questions = document.getElementById('questions').value.trim() || 'なし';
 
-            // ラジオボタンの取得 (プラン)
             const planRadio = document.querySelector('input[name="plan"]:checked');
             const plan = planRadio ? planRadio.value : '';
 
-            // ラジオボタンの取得 (分娩方法)
             const deliveryRadio = document.querySelector('input[name="delivery"]:checked');
             const delivery = deliveryRadio ? deliveryRadio.value : '未記入';
 
-            // ラジオボタンの取得 (お子様の性別)
             const genderRadio = document.querySelector('input[name="babyGender"]:checked');
             const babyGender = genderRadio ? genderRadio.value : '未記入';
 
             // 必須入力チェック
-            if (!name || !phone || !address || !date1 || !date2 || !plan) {
+            if (!nameInput || !phone || !address || !date1 || !date2 || !plan) {
                 alert('必須項目(*)をすべて入力・選択してください。');
                 return;
             }
