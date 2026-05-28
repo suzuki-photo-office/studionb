@@ -12,35 +12,33 @@
         
         .container { max-width: 500px; margin: 0 auto; }
         
-        /* タイトルエリア：背景色 #b5c8bf、文字色を「白」に変更 */
+        /* タイトルエリア：背景色 #b5c8bf、文字色は「白」を維持 */
         .header-area { background-color: #b5c8bf; padding: 30px 16px; text-align: center; color: #ffffff; margin-bottom: 24px; }
         h2 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
         .subtitle { font-size: 13px; color: #ffffff; opacity: 0.9; }
         
         .form-content { padding: 0 16px; }
         
-        /* 入力欄を囲むカードの背景色を #b5c8bf に変更 */
-        .form-group { background: #b5c8bf; padding: 20px 16px; border-radius: 12px; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); border: 1px solid #a3b8ad; }
+        /* 入力欄を囲むカードの背景色を「元の白(#ffffff)」に戻しました */
+        .form-group { background: #ffffff; padding: 20px 16px; border-radius: 12px; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); border: 1px solid #eaeaea; }
         
-        /* カード内の文字色を入力欄と見分けやすく調整 */
-        label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #2b3a32; }
+        /* 文字色も白背景に見やすい元の濃い色に戻しています */
+        label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #222; }
         .required-badge { background-color: #ff4d4f; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; margin-left: 6px; vertical-align: middle; }
-        .optional-badge { background-color: #697d73; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; margin-left: 6px; vertical-align: middle; }
+        .optional-badge { background-color: #8c8c8c; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; margin-left: 6px; vertical-align: middle; }
         
-        /* 入力ボックス自体は文字が見やすくなるよう白背景を維持しつつ、枠線を馴染ませています */
         input[type="text"], input[type="tel"], input[type="date"], input[type="number"], input[type="datetime-local"], textarea { 
             width: 100%; padding: 14px; border: 1px solid #d9d9d9; border-radius: 8px; font-size: 16px; background: #ffffff; color: #333; transition: all 0.2s; -webkit-appearance: none;
         }
         textarea { resize: vertical; min-height: 80px; font-family: inherit; }
-        input:focus, textarea:focus { border-color: #7aa692; outline: none; background: #fff; box-shadow: 0 0 0 3px rgba(122, 166, 146, 0.2); }
+        input:focus, textarea:focus { border-color: #7aa692; outline: none; background: #fff; box-shadow: 0 0 0 3px rgba(122, 166, 146, 0.1); }
         input::placeholder, textarea::placeholder { color: #bfbfbf; font-size: 15px; }
         
-        /* ラジオボタンエリアの文字色調整 */
-        .radio-group { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; color: #2b3a32; }
-        .radio-label { display: flex; align-items: center; font-weight: 500; font-size: 15px; cursor: pointer; }
+        .radio-group { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
+        .radio-label { display: flex; align-items: center; font-weight: normal; font-size: 15px; cursor: pointer; }
         .radio-label input { width: 20px; height: 20px; margin-right: 12px; accent-color: #7aa692; }
         
-        .note { font-size: 12px; color: #52635a; margin-top: 6px; line-height: 1.4; }
+        .note { font-size: 12px; color: #8c8c8c; margin-top: 6px; line-height: 1.4; }
         
         .btn-area { margin-top: 24px; padding: 0 16px; }
         button { width: 100%; padding: 16px; background-color: #7aa692; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(122, 166, 146, 0.2); transition: all 0.2s; }
@@ -125,7 +123,7 @@
                 <label>お子様の性別<span class="optional-badge">任意</span></label>
                 <div class="radio-group">
                     <label class="radio-label"><input type="radio" name="babyGender" value="男の子"> 男の子</label>
-                    <label class="radio-label"><input type="radio" name="女の子" value="女の子"> 女の子</label>
+                    <label class="radio-label"><input type="radio" name="babyGender" value="女の子"> 女の子</label>
                     <label class="radio-label"><input type="radio" name="babyGender" value="わからない"> わからない</label>
                 </div>
             </div>
@@ -185,7 +183,6 @@
         // 送信処理
         function submitForm() {
             const nameInput = document.getElementById('name').value.trim();
-            // お名前のあとに「様」を自動でくっつける処理
             const name = nameInput ? nameInput + ' 様' : '';
             
             const phone = document.getElementById('phone').value.trim();
