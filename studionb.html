@@ -29,6 +29,9 @@
         input[type="text"], input[type="tel"], input[type="date"], input[type="number"], input[type="datetime-local"], textarea { 
             width: 100%; padding: 14px; border: 1px solid #d9d9d9; border-radius: 8px; font-size: 16px; background: #ffffff; color: #333; transition: all 0.2s; -webkit-appearance: none;
         }
+        /* 郵便番号欄を短くするための専用スタイル（幅を45%に制限） */
+        input#zipcode { width: 45%; }
+        
         textarea { resize: vertical; min-height: 80px; font-family: inherit; }
         input:focus, textarea:focus { border-color: #7aa692; outline: none; background: #fff; box-shadow: 0 0 0 3px rgba(122, 166, 146, 0.1); }
         input::placeholder, textarea::placeholder { color: #bfbfbf; font-size: 15px; }
@@ -69,7 +72,7 @@
                 <span class="sub-label" style="margin-top: 0;">郵便番号<span class="optional-badge">任意</span></span>
                 <input type="text" id="zipcode" placeholder="例：123-4567" style="margin-bottom: 12px;">
                 
-                <span class="sub-label">住所詳細<span class="required-badge">必須</span></span>
+                <span class="sub-label">住所<span class="required-badge">必須</span></span>
                 <input type="text" id="address" placeholder="例：東京都渋谷区○○1-2-3">
             </div>
 
@@ -199,4 +202,73 @@
             const birthDate = document.getElementById('birthDate').value || '未記入';
             const babyName = document.getElementById('babyName').value.trim() || '未記入';
             const babyWeightInput = document.getElementById('babyWeight').value.trim();
-            const babyWeight = baby
+            const babyWeight = babyWeightInput ? babyWeightInput + 'g' : '未記入';
+            
+            const siblings = document.getElementById('siblings').value.trim() || 'なし';
+            const attendees = document.getElementById('attendees').value.trim() || '未記入';
+            const questions = document.getElementById('questions').value.trim() || 'なし';
+
+            const planRadio = document.querySelector('input[name="plan"]:checked');
+            const plan = planRadio ? planRadio.value : '';
+
+            // チェックボックス（オプション）の取得
+            const optionBoxes = document.querySelectorAll('input[name="option"]:checked');
+            const options = [];
+            optionBoxes.forEach((cb) => { options.push(cb.value); });
+            const optionText = options.length > 0 ? options.map(opt => `・${opt}`).join('\n') : 'なし';
+
+            const deliveryRadio = document.querySelector('input[name="delivery"]:checked');
+            const delivery = deliveryRadio ? deliveryRadio.value : '未記入';
+
+            const genderRadio = document.querySelector('input[name="babyGender"]:checked');
+            const babyGender = genderRadio ? genderRadio.value : '未記入';
+
+            // 必須入力チェック
+            if (!nameInput || !phone || !address || !date1 || !date2 || !plan) {
+                alert('必須項目(*)をすべて入力・選択してください。');
+                return;
+            }
+
+            const formatDate = (dt) => dt ? dt.replace('T', ' ') : 'なし';
+
+            // 送信メッセージの構築
+            const messageText = `【予約申込】スタジオニューボーン
+■お名前：${name}
+■お電話番号：${phone}
+■郵便番号：${zipcode}
+■ご住所：${address}
+■撮影希望日①：${formatDate(date1)}
+■撮影希望日②：${formatDate(date2)}
+■撮影希望日③：${formatDate(date3)}
+■希望プラン：${plan}
+■オプション：
+${optionText}
+■出産予定日or出産日：${birthDate}
+■分娩方法：${delivery}
+■お子様のお名前：${babyName}
+■お子様の性別：${babyGender}
+■出生体重：${babyWeight}
+■ご兄弟のお名前、性別、年齢：
+${siblings}
+■撮影に参加される方の人数と続柄：
+${attendees}
+■ご質問、ご相談：
+${questions}
+
+上記の内容で予約を送信しました。確定までしばらくお待ちください。`;
+
+            liff.sendMessages([
+                {
+                    type: 'text',
+                    text: messageText
+                }
+            ]).then(() => {
+                liff.closeWindow();
+            }).catch((err) => {
+                alert('送信エラーが発生しました。');
+                console.error(err);
+            });
+        }
+    </script>
+</body>
+</html>
