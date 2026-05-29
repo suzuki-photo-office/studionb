@@ -26,13 +26,13 @@
         .required-badge { background-color: #ff4d4f; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; margin-left: 6px; vertical-align: middle; }
         .optional-badge { background-color: #8c8c8c; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; margin-left: 6px; vertical-align: middle; }
         
-        input[type="text"], input[type="tel"], input[type="date"], input[type="number"], input[type="datetime-local"], textarea { 
+        input[type="text"], input[type="tel"], input[type="date"], input[type="number"], textarea { 
             width: 100%; padding: 14px; border: 1px solid #d9d9d9; border-radius: 8px; font-size: 16px; background: #ffffff; color: #333; transition: all 0.2s; -webkit-appearance: none;
         }
         input#zipcode { width: 45%; }
         
         textarea { resize: vertical; min-height: 80px; font-family: inherit; }
-        input:focus, textarea:focus { border-color: #7aa692; outline: none; background: #fff; box-shadow: 0 0 0 3px rgba(122, 166, 146, 0.1); }
+        input:focus, textarea:focus { border-color: #a89f91; outline: none; background: #fff; box-shadow: 0 0 0 3px rgba(168, 159, 145, 0.1); }
         input::placeholder, textarea::placeholder { color: #bfbfbf; font-size: 15px; }
         
         /* ラジオボタン・チェックボックスの共通スタイル */
@@ -40,10 +40,16 @@
         .choice-label { display: flex; align-items: center; font-weight: normal; font-size: 15px; cursor: pointer; }
         .choice-label input { width: 20px; height: 20px; margin-right: 12px; accent-color: #7aa692; }
         
+        /* 希望日カード内の時間帯選択用スタイル */
+        .time-selector-group { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; padding-top: 12px; border-top: 1px dashed #eee; }
+        .time-label { display: flex; align-items: center; font-size: 14px; font-weight: normal; cursor: pointer; color: #555; }
+        .time-label input { width: 18px; height: 18px; margin-right: 8px; accent-color: #a89f91; }
+
         .btn-area { margin-top: 24px; padding: 0 16px; }
-        button { width: 100%; padding: 16px; background-color: #7aa692; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: all 0.2s; }
+        /* 送信ボタンの色を「グレージュ(#a89f91)」に変更 */
+        button { width: 100%; padding: 16px; background-color: #a89f91; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(168, 159, 145, 0.2); transition: all 0.2s; }
         button:disabled { background-color: #d9d9d9; color: #8c8c8c; cursor: not-allowed; box-shadow: none; }
-        button:active { background-color: #638c7b; transform: scale(0.99); }
+        button:active { background-color: #8c8376; transform: scale(0.99); }
     </style>
 </head>
 <body>
@@ -77,17 +83,32 @@
 
             <div class="form-group">
                 <label for="date1">撮影希望日①<span class="required-badge">必須</span></label>
-                <input type="datetime-local" id="date1">
+                <input type="date" id="date1">
+                <div class="time-selector-group">
+                    <label class="time-label"><input type="radio" name="time1" value="午前枠10:30"> 午前枠10:30</label>
+                    <label class="time-label"><input type="radio" name="time1" value="午後枠13:30"> 午後枠13:30</label>
+                    <label class="time-label"><input type="radio" name="time1" value="相談したい"> 相談したい</label>
+                </div>
             </div>
 
             <div class="form-group">
                 <label for="date2">撮影希望日②<span class="required-badge">必須</span></label>
-                <input type="datetime-local" id="date2">
+                <input type="date" id="date2">
+                <div class="time-selector-group">
+                    <label class="time-label"><input type="radio" name="time2" value="午前枠10:30"> 午前枠10:30</label>
+                    <label class="time-label"><input type="radio" name="time2" value="午後枠13:30"> 午後枠13:30</label>
+                    <label class="time-label"><input type="radio" name="time2" value="相談したい"> 相談したい</label>
+                </div>
             </div>
 
             <div class="form-group">
                 <label for="date3">撮影希望日③<span class="optional-badge">任意</span></label>
-                <input type="datetime-local" id="date3">
+                <input type="date" id="date3">
+                <div class="time-selector-group">
+                    <label class="time-label"><input type="radio" name="time3" value="午前枠10:30"> 午前枠10:30</label>
+                    <label class="time-label"><input type="radio" name="time3" value="午後枠13:30"> 午後枠13:30</label>
+                    <label class="time-label"><input type="radio" name="time3" value="相談したい"> 相談したい</label>
+                </div>
             </div>
 
             <div class="form-group">
@@ -188,86 +209,4 @@
 
         // 送信処理
         function submitForm() {
-            const nameInput = document.getElementById('name').value.trim();
-            const name = nameInput ? nameInput + ' 様' : '';
-            
-            const phone = document.getElementById('phone').value.trim();
-            const zipcode = document.getElementById('zipcode').value.trim() || '未記入';
-            const address = document.getElementById('address').value.trim();
-            const date1 = document.getElementById('date1').value;
-            const date2 = document.getElementById('date2').value;
-            const date3 = document.getElementById('date3').value;
-            
-            const birthDate = document.getElementById('birthDate').value || '未記入';
-            const babyName = document.getElementById('babyName').value.trim() || '未記入';
-            const babyWeightInput = document.getElementById('babyWeight').value.trim();
-            const babyWeight = babyWeightInput ? babyWeightInput + 'g' : '未記入';
-            
-            const siblings = document.getElementById('siblings').value.trim() || 'なし';
-            const attendees = document.getElementById('attendees').value.trim() || '未記入';
-            const questions = document.getElementById('questions').value.trim() || 'なし';
-
-            const planRadio = document.querySelector('input[name="plan"]:checked');
-            const plan = planRadio ? planRadio.value : '';
-
-            // チェックボックス（オプション）の取得
-            const optionBoxes = document.querySelectorAll('input[name="option"]:checked');
-            const options = [];
-            optionBoxes.forEach((cb) => { options.push(cb.value); });
-            const optionText = options.length > 0 ? options.map(opt => `・${opt}`).join('\n') : 'なし';
-
-            const deliveryRadio = document.querySelector('input[name="delivery"]:checked');
-            const delivery = deliveryRadio ? deliveryRadio.value : '未記入';
-
-            const genderRadio = document.querySelector('input[name="babyGender"]:checked');
-            const babyGender = genderRadio ? genderRadio.value : '未記入';
-
-            // 必須入力チェック
-            if (!nameInput || !phone || !address || !date1 || !date2 || !plan) {
-                alert('必須項目(*)をすべて入力・選択してください。');
-                return;
-            }
-
-            const formatDate = (dt) => dt ? dt.replace('T', ' ') : 'なし';
-
-            // 送信メッセージの構築
-            const messageText = `【予約申込】スタジオニューボーン
-■お名前：${name}
-■お電話番号：${phone}
-■郵便番号：${zipcode}
-■ご住所：${address}
-■撮影希望日①：${formatDate(date1)}
-■撮影希望日②：${formatDate(date2)}
-■撮影希望日③：${formatDate(date3)}
-■希望プラン：${plan}
-■オプション：
-${optionText}
-■出産予定日or出産日：${birthDate}
-■分娩方法：${delivery}
-■お子様のお名前：${babyName}
-■お子様の性別：${babyGender}
-■出生体重：${babyWeight}
-■ご兄弟のお名前、性別、年齢：
-${siblings}
-■撮影に参加される方の人数と続柄：
-${attendees}
-■ご質問、ご相談：
-${questions}
-
-上記の内容で予約を送信しました。確定までしばらくお待ちください。`;
-
-            liff.sendMessages([
-                {
-                    type: 'text',
-                    text: messageText
-                }
-            ]).then(() => {
-                liff.closeWindow();
-            }).catch((err) => {
-                alert('送信エラーが発生しました。');
-                console.error(err);
-            });
-        }
-    </script>
-</body>
-</html>
+            const name
