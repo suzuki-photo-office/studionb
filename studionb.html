@@ -209,4 +209,101 @@
 
         // 送信処理
         function submitForm() {
-            const name
+            const nameInput = document.getElementById('name').value.trim();
+            const name = nameInput ? nameInput + ' 様' : '';
+            
+            const phone = document.getElementById('phone').value.trim();
+            const zipcode = document.getElementById('zipcode').value.trim() || '未記入';
+            const address = document.getElementById('address').value.trim();
+            
+            // 日付の取得
+            const date1 = document.getElementById('date1').value;
+            const date2 = document.getElementById('date2').value;
+            const date3 = document.getElementById('date3').value;
+            
+            // ラジオボタンの取得（時間帯）
+            const time1Radio = document.querySelector('input[name="time1"]:checked');
+            const time1 = time1Radio ? time1Radio.value : '';
+            
+            const time2Radio = document.querySelector('input[name="time2"]:checked');
+            const time2 = time2Radio ? time2Radio.value : '';
+            
+            const time3Radio = document.querySelector('input[name="time3"]:checked');
+            const time3 = time3Radio ? time3Radio.value : '未選択';
+            
+            const birthDate = document.getElementById('birthDate').value || '未記入';
+            const babyName = document.getElementById('babyName').value.trim() || '未記入';
+            const babyWeightInput = document.getElementById('babyWeight').value.trim();
+            const babyWeight = babyWeightInput ? babyWeightInput + 'g' : '未記入';
+            
+            const siblings = document.getElementById('siblings').value.trim() || 'なし';
+            const attendees = document.getElementById('attendees').value.trim() || '未記入';
+            const questions = document.getElementById('questions').value.trim() || 'なし';
+
+            const planRadio = document.querySelector('input[name="plan"]:checked');
+            const plan = planRadio ? planRadio.value : '';
+
+            // チェックボックス（オプション）の取得
+            const optionBoxes = document.querySelectorAll('input[name="option"]:checked');
+            const options = [];
+            optionBoxes.forEach((cb) => { options.push(cb.value); });
+            const optionText = options.length > 0 ? options.map(opt => `・${opt}`).join('\n') : 'なし';
+
+            const deliveryRadio = document.querySelector('input[name="delivery"]:checked');
+            const delivery = deliveryRadio ? deliveryRadio.value : '未記入';
+
+            const genderRadio = document.querySelector('input[name="babyGender"]:checked');
+            const babyGender = genderRadio ? genderRadio.value : '未記入';
+
+            // 必須入力チェック（希望日①・②は、日付と時間帯の「両方」が選ばれている必要があります）
+            if (!nameInput || !phone || !address || !date1 || !time1 || !date2 || !time2 || !plan) {
+                alert('必須項目(*)をすべて入力し、撮影希望日の日付と時間帯を両方選択してください。');
+                return;
+            }
+
+            // チャットへ送る日時のレイアウト組み立て
+            const dateTimeText1 = `${date1} (${time1})`;
+            const dateTimeText2 = `${date2} (${time2})`;
+            const dateTimeText3 = date3 ? `${date3} (${time3})` : 'なし';
+
+            // 送信メッセージの構築
+            const messageText = `【予約申込】スタジオニューボーン
+■お名前：${name}
+■お電話番号：${phone}
+■郵便番号：${zipcode}
+■ご住所：${address}
+■撮影希望日①：${dateTimeText1}
+■撮影希望日②：${dateTimeText2}
+■撮影希望日③：${dateTimeText3}
+■希望プラン：${plan}
+■オプション：
+${optionText}
+■出産予定日or出産日：${birthDate}
+■分娩方法：${delivery}
+■お子様のお名前：${babyName}
+■お子様の性別：${babyGender}
+■出生体重：${babyWeight}
+■ご兄弟のお名前、性別、年齢：
+${siblings}
+■撮影に参加される方の人数と続柄：
+${attendees}
+■ご質問、ご相談：
+${questions}
+
+上記の内容で予約を送信しました。確定までしばらくお待ちください。`;
+
+            liff.sendMessages([
+                {
+                    type: 'text',
+                    text: messageText
+                }
+            ]).then(() => {
+                liff.closeWindow();
+            }).catch((err) => {
+                alert('送信エラーが発生しました。');
+                console.error(err);
+            });
+        }
+    </script>
+</body>
+</html>
