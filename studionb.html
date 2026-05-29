@@ -29,7 +29,6 @@
         input[type="text"], input[type="tel"], input[type="date"], input[type="number"], input[type="datetime-local"], textarea { 
             width: 100%; padding: 14px; border: 1px solid #d9d9d9; border-radius: 8px; font-size: 16px; background: #ffffff; color: #333; transition: all 0.2s; -webkit-appearance: none;
         }
-        /* 郵便番号欄を短くするための専用スタイル（幅を45%に制限） */
         input#zipcode { width: 45%; }
         
         textarea { resize: vertical; min-height: 80px; font-family: inherit; }
@@ -69,10 +68,10 @@
             <div class="form-group">
                 <label>ご住所<span class="required-badge">必須</span></label>
                 
-                <span class="sub-label" style="margin-top: 0;">郵便番号<span class="optional-badge">任意</span></span>
+                <span class="sub-label" style="margin-top: 0;">郵便番号</span>
                 <input type="text" id="zipcode" placeholder="例：123-4567" style="margin-bottom: 12px;">
                 
-                <span class="sub-label">住所<span class="required-badge">必須</span></span>
+                <span class="sub-label">住所</span>
                 <input type="text" id="address" placeholder="例：東京都渋谷区○○1-2-3">
             </div>
 
